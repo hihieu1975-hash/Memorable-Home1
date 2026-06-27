@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<title>🏡 Nhà Mình</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --green-bg: #dcfce7;
+  --red: #ef4444;
+  --red-dark: #dc2626;
+  --red-bg: #fee2e2;
+  --purple: #7c3aed;
+  --purple-dark: #6d28d9;
+  --purple-bg: #ede9fe;
+  --yellow: #f59e0b;
+  --yellow-bg: #fef3c7;
+  --surface: rgba(255,255,255,0.10);
+  --surface-hover: rgba(255,255,255,0.16);
+  --border: rgba(255,255,255,0.18);
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.60);
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: url("e61cfc80bd25afb15e8330deba0539f6de6f2edd-1320x750.png") center/cover no-repeat;
+  background-attachment: local;
+  min-height: 100vh;
+  padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px);
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  color: var(--text);
+}
+
+.container { max-width: 1400px; margin: auto; }
+
+header { text-align: center; margin-bottom: 32px; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+header h1 { font-size: 2.6rem; }
+header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 520px 1fr;
+  gap: 20px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+
+/* CENTER */
+.center-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 32px;
+}
+
+.temp { font-size: 5rem; font-weight: 700; line-height: 1; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.12);
+}
+
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-on  { background: var(--green); }
+.dot-off { background: var(--red); }
+.dot-auto { background: #c084fc; }
+
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; width: 100%; }
+
+.ctrl-btn {
+  flex: 1;
+  padding: 14px 0;
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+  background: rgba(255,255,255,0.10);
+  transition: transform 0.15s, filter 0.15s, background 0.15s;
+}
+.ctrl-btn:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+.ctrl-btn:active { transform: translateY(0); }
+
+.ctrl-btn.active-on   { background: linear-gradient(135deg, var(--green), var(--green-dark)); border-color: transparent; }
+.ctrl-btn.active-off  { background: linear-gradient(135deg, var(--red), var(--red-dark)); border-color: transparent; }
+.ctrl-btn.active-auto { background: linear-gradient(135deg, var(--purple), var(--purple-dark)); border-color: transparent; }
+
+.unlock-btn {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid rgba(253,230,138,0.6);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #78350f;
+  background: linear-gradient(135deg,
+    #fef9c3 0%,
+    #fde68a 20%,
+    #f59e0b 40%,
+    #fbbf24 55%,
+    #f59e0b 70%,
+    #fde68a 85%,
+    #fef9c3 100%
+  );
+  background-size: 200% 200%;
+  animation: goldShimmer 3s ease infinite;
+  box-shadow:
+    0 0 18px rgba(251,191,36,0.45),
+    0 4px 24px rgba(245,158,11,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.55);
+  text-shadow: 0 1px 2px rgba(120,53,15,0.3);
+  letter-spacing: 0.03em;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.unlock-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255,255,255,0.55),
+    transparent
+  );
+  animation: goldSweep 3s ease infinite;
+  pointer-events: none;
+}
+
+@keyframes goldShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes goldSweep {
+  0%   { left: -60%; }
+  50%  { left: 130%; }
+  100% { left: 130%; }
+}
+
+.unlock-btn:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 28px rgba(251,191,36,0.65),
+    0 8px 32px rgba(245,158,11,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.unlock-btn:active { transform: translateY(0px); }
+.unlock-btn:disabled { opacity: 0.7; cursor: default; transform: none; animation: none; }
+
+/* HISTORY */
+.history-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.h-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+.h-item-user { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.h-item-time { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+
+/* RANK */
+.rank-list { display: flex; flex-direction: column; gap: 8px; }
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+.rank-medal { font-size: 1rem; min-width: 22px; }
+.rank-name { flex: 1; }
+.rank-score { font-weight: 700; color: #fde68a; }
+
+/* COMMENTS */
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+.comment-item {
+  background: rgba(0,0,0,0.15);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.comment-author { font-size: 0.8rem; font-weight: 600; }
+.comment-text { font-size: 0.9rem; margin-top: 3px; }
+.comment-time { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+.input-row { display: flex; gap: 8px; }
+.msg-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.10);
+  color: white;
+  font-size: 0.9rem;
+  outline: none;
+}
+.msg-input::placeholder { color: var(--text-muted); }
+.msg-input:focus { border-color: rgba(255,255,255,0.4); }
+
+.send-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+.send-btn:hover { filter: brightness(1.1); }
+
+.empty { color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 12px 0; }
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: white;
+  color: #1a1a1a;
+  border-radius: 24px;
+  padding: 40px 32px;
+  text-align: center;
+  max-width: 300px;
+  width: 90%;
+}
+.modal-box .icon { font-size: 60px; margin-bottom: 12px; }
+.modal-box h2 { font-size: 1.4rem; margin-bottom: 8px; }
+.modal-box p { font-size: 0.9rem; color: #555; margin-bottom: 20px; }
+.modal-close {
+  padding: 10px 28px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.camera-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.015) 2px,
+    rgba(255,255,255,0.015) 4px
+  );
+  pointer-events: none;
+}
+
+.cam-live-dot {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.cam-live-dot::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: livePulse 1.5s ease infinite;
+}
+
+@keyframes blueShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.cam-tier-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .temp { font-size: 3.5rem; }
+  .center-card { padding: 28px 20px; }
+}
+
+@media (max-width: 480px) {
+  body { padding: 12px 10px; }
+  header h1 { font-size: 1.8rem; }
+  .card { padding: 16px; border-radius: 18px; }
+  .center-card { padding: 20px 16px; }
+  .temp { font-size: 3rem; }
+  .btn-row { gap: 6px; }
+  .ctrl-btn { padding: 12px 0; font-size: 0.9rem; border-radius: 12px; }
+  .unlock-btn { font-size: 0.9rem; padding: 12px; }
+  .modal-box { padding: 28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🏡 Nhà Mình ✨</h1>
+    <p>Vì một Việt Nam Thịnh Vượng</p>
+    <p style="margin-top:10px; font-size:0.9rem; opacity:0.75;">
+      Xin chào, <b id="display-name"></b>!
+      <button onclick="changeName()" style="margin-left:8px; padding:3px 10px; border:1px solid rgba(255,255,255,0.4); border-radius:8px; background:rgba(255,255,255,0.12); color:white; font-size:0.8rem; cursor:pointer;">✏️ Đổi tên</button>
+    </p>
+  </header>
+
+  <div class="grid">
+
+    <!-- LEFT: Leaderboard -->
+    <div class="card">
+      <h3>🏆 Bảng Xếp Hạng</h3>
+      <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); margin-bottom:12px;">Bật đèn mỗi lần được +100 điểm</div>
+      <div class="rank-list" id="rank-list">
+        <div class="empty">Chưa có dữ liệu</div>
+      </div>
+    </div>
+
+    <!-- CENTER: Control -->
+    <div class="card center-card">
+      <div class="temp" id="temp">--°C</div>
+      <div style="font-size:0.75rem; color:rgba(255,255,255,0.55); margin-top:-8px; display:flex; align-items:center; gap:4px;">
+        <i class="ti ti-map-pin" style="font-size:14px;"></i> Quảng Văn, Quảng Xương, Thanh Hóa
+      </div>
+
+      <div class="status-badge" id="status-badge">
+        <span class="dot dot-on" id="status-dot"></span>
+        <span id="status-text">Đèn đang bật</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="ctrl-btn active-on" id="btn-on"   onclick="control('on')">BẬT</button>
+        <button class="ctrl-btn"           id="btn-auto" onclick="control('auto')">AUTO</button>
+        <button class="ctrl-btn"           id="btn-off"  onclick="control('off')">TẮT</button>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <div class="empty">Chưa có lịch sử</div>
+      </div>
+
+      <!-- Camera zone -->
+      <div id="camera-zone" style="width:100%;">
+        <button class="unlock-btn" onclick="openModal()">
+          📹 Nạp tiền để Unlock Camera
+        </button>
+      </div>
+
+      <div style="margin-top:4px; text-align:center; line-height:1.6;">
+        <div style="font-size:0.7rem; color:rgba(255,255,255,0.45); letter-spacing:0.05em; text-transform:uppercase;">Designed by</div>
+        <div style="font-size:0.95rem; font-weight:700; color:rgba(255,255,255,0.90);">Mã Văn Hiếu</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.55);">Kỹ thuật Điều khiển & Tự động hóa 1 — K64</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Journal -->
+    <div class="card">
+      <h3>💬 Nhật Ký</h3>
+      <div class="comment-list" id="comments">
+        <div class="empty">Chưa có lời nhắn</div>
+      </div>
+      <div class="input-row">
+        <input class="msg-input" id="comment-input" placeholder="Viết lời nhắn..."
+               onkeydown="if(event.key==='Enter') sendComment()">
+        <button class="send-btn" onclick="sendComment()">Gửi</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PROFILE -->
+  <div style="margin-top:20px; background:rgba(255,255,255,0.10); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,0.18); border-radius:24px; padding:28px 32px;">
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:20px;">👨‍💻 Về tác giả — Mã Văn Hiếu</h3>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px;">
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; text-align:center;">
+        <div style="font-size:1.6rem; font-weight:700; color:#fde68a;">3.45</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:4px;">GPA</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; text-align:center;">
+        <div style="font-size:1.6rem; font-weight:700; color:#86efac;">IELTS 6.5</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:4px;">Tiếng Anh (2022)</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; text-align:center;">
+        <div style="font-size:1.6rem; font-weight:700; color:#f9a8d4;">HSK 5</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:4px;">Tiếng Trung (2026)</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; text-align:center;">
+        <div style="font-size:1.6rem; font-weight:700; color:#c4b5fd;">2 kì</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:4px;">Học bổng KKHT</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px;">Thành tích nổi bật</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px;">
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-cpu" style="font-size:22px; color:#fde68a; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Bãi gửi xe thông minh</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">ESP32 + YOLOv8 nhận diện biển số · thiết kế hoàn chỉnh cơ khí thang máy tầng</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-settings-automation" style="font-size:22px; color:#86efac; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Máy in tampon 1 màu</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">Lập trình PLC Mitsubishi hoàn chỉnh</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-bolt" style="font-size:22px; color:#c4b5fd; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Tủ điều khiển động cơ</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">Thiết kế hoàn chỉnh BLDC, 3 pha · thành thạo điều khiển Servo</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-adjustments" style="font-size:22px; color:#a5f3fc; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Cài đặt biến tần</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">Cài đặt tham số biến tần cho động cơ</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-antenna" style="font-size:22px; color:#f9a8d4; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Truyền thông nhúng</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">UART / SPI / I2C Master-Slave · RS232, RS485</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-wave-square" style="font-size:22px; color:#fbbf24; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Mạch băm xung IC555</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">Điều khiển đèn 24V · thiết kế phần cứng hoàn chỉnh</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.15); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+        <i class="ti ti-device-desktop" style="font-size:22px; color:#67e8f9; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div style="font-size:0.9rem; font-weight:600;">Giao tiếp ngoại vi</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:3px;">LED 7 thanh · LCD · Ma trận LED · Cảm biến nhiệt độ DS18B20, siêu âm HC-SR04, Encoder · Transistor MOSFET, BJT · Relay, Optocoupler · Buzzer còi báo</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box" style="max-width:400px; width:92%; background:#1a1128; color:white; border:1px solid rgba(255,255,255,0.12);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <div style="font-size:1.1rem; font-weight:700; letter-spacing:0.02em;">Unlock Camera</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:3px;">Chọn gói phù hợp với bạn</div>
+      </div>
+      <button onclick="closeModal()" style="background:rgba(255,255,255,0.08); border:none; color:white; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+    </div>
+
+    <!-- Gói 10k -->
+    <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:16px; margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+        <div>
+          <div style="font-size:0.95rem; font-weight:600;">Classic — Camera trực tiếp</div>
+          <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:3px;">Xem camera phát trực tiếp trong nhà</div>
+        </div>
+        <span style="font-size:1.1rem; font-weight:800; color:#86efac; white-space:nowrap; margin-left:12px;">10.000đ</span>
+      </div>
+      <button class="unlock-btn" style="font-size:0.85rem; padding:11px;" onclick="confirmPay('10k')">Nạp ngay 10k</button>
+    </div>
+
+    <!-- Gói 15k -->
+    <div style="background:rgba(124,58,237,0.15); border:1px solid rgba(196,181,253,0.25); border-radius:16px; padding:16px; margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+        <div>
+          <div style="font-size:0.95rem; font-weight:600;">Pro — AI YOLOv8 + Camera</div>
+          <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); margin-top:4px; line-height:1.5;">YOLOv8 là thuật toán thị giác máy tính tiên tiến, nhận diện và theo dõi vật thể trong thời gian thực với độ chính xác cao</div>
+          <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:4px;">Camera trực tiếp · Phát hiện người & vật chuyển động</div>
+          <div style="font-size:0.72rem; color:#f9a8d4; margin-top:5px;">Thuật toán này thực sự đã nhiều lần ghi nhận vật thể không xác định</div>
+        </div>
+        <span style="font-size:1.1rem; font-weight:800; color:#c4b5fd; white-space:nowrap; margin-left:12px;">15.000đ</span>
+      </div>
+      <button class="unlock-btn" style="font-size:0.85rem; padding:11px;" onclick="confirmPay('15k')">Nạp ngay 15k</button>
+    </div>
+
+    <!-- Gói 20k -->
+    <div style="background:rgba(251,191,36,0.08); border:1px solid rgba(253,230,138,0.30); border-radius:16px; padding:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;">
+            <span style="background:linear-gradient(135deg,#fde68a,#f59e0b); color:#78350f; font-size:0.62rem; font-weight:800; padding:2px 7px; border-radius:5px;">VIP</span>
+            <span style="font-size:0.95rem; font-weight:600;">Premium — Full Pack</span>
+          </div>
+          <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:2px;">Camera trực tiếp · AI YOLOv8 · Tự động lưu lịch sử khoảnh khắc bắt được vật thể không xác định để truy xuất xem lại</div>
+          
+        </div>
+        <span style="font-size:1.1rem; font-weight:800; color:#fde68a; white-space:nowrap; margin-left:12px;">20.000đ</span>
+      </div>
+      <button class="unlock-btn" style="font-size:0.85rem; padding:11px;" onclick="confirmPay('20k')">Nạp ngay 20k</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="modal-success">
+  <div class="modal-box" style="max-width:300px;">
+    <div class="icon" id="success-icon">🎉</div>
+    <h2 id="success-title"></h2>
+    <p id="success-body" style="line-height:1.6; font-size:0.88rem;"></p>
+    <button class="modal-close" onclick="closeSuccess()" style="margin-top:4px;">Đóng</button>
+  </div>
+</div>
+
+<script>
+/* ===== INIT USER ===== */
+let memberName = localStorage.getItem('member_name');
+if (!memberName) {
+  memberName = prompt('Nhập tên của bạn:') || 'Thành viên';
+  localStorage.setItem('member_name', memberName);
+}
+
+let historyData = JSON.parse(localStorage.getItem('history') || '[]');
+let commentData = JSON.parse(localStorage.getItem('comments') || '[]');
+document.getElementById('display-name').textContent = memberName;
+
+function changeName() {
+  const newName = prompt('Nhập tên mới:', memberName);
+  if (!newName || !newName.trim() || newName.trim() === memberName) return;
+  memberName = newName.trim();
+  localStorage.setItem('member_name', memberName);
+  document.getElementById('display-name').textContent = memberName;
+}
+
+/* ===== CONTROL ===== */
+function control(cmd) {
+  const configs = {
+    on:   { text: 'Đèn đang bật',      dotClass: 'dot-on',   btnActive: 'active-on',   histLabel: 'Bật đèn',  addPt: true },
+    off:  { text: 'Đèn đang tắt',      dotClass: 'dot-off',  btnActive: 'active-off',  histLabel: 'Tắt đèn',  addPt: false },
+    auto: { text: 'Chế độ tự động',    dotClass: 'dot-auto', btnActive: 'active-auto', histLabel: 'Auto mode', addPt: false },
+  };
+  const c = configs[cmd];
+
+  document.getElementById('status-text').textContent = c.text;
+  document.getElementById('status-dot').className = 'dot ' + c.dotClass;
+
+  ['btn-on', 'btn-auto', 'btn-off'].forEach(id => {
+    document.getElementById(id).className = 'ctrl-btn';
+  });
+  document.getElementById('btn-' + cmd).classList.add(c.btnActive);
+
+  if (c.addPt) addPoint();
+  addHistory(c.histLabel);
+}
+
+/* ===== HISTORY ===== */
+function addHistory(action) {
+  historyData.unshift({ action, user: memberName, time: new Date().toLocaleTimeString('vi-VN') });
+  if (historyData.length > 20) historyData.pop();
+  localStorage.setItem('history', JSON.stringify(historyData));
+  renderHistory();
+}
+
+function renderHistory() {
+  const box = document.getElementById('history-list');
+  if (!historyData.length) { box.innerHTML = "<div class='empty'>Chưa có lịch sử</div>"; return; }
+  const icons = { 'Bật đèn': '💡', 'Tắt đèn': '⛔', 'Auto mode': '🤖' };
+  box.innerHTML = historyData.map(h => `
+    <div class="h-item">
+      <div>
+        <div>${icons[h.action] || '⚡'} ${h.action}</div>
+        <div class="h-item-user">👤 ${h.user}</div>
+      </div>
+      <div class="h-item-time">${h.time}</div>
+    </div>`).join('');
+}
+
+/* ===== LEADERBOARD ===== */
+function addPoint() {
+  const rank = JSON.parse(localStorage.getItem('leaderboard') || '{}');
+  rank[memberName] = (rank[memberName] || 0) + 100;
+  localStorage.setItem('leaderboard', JSON.stringify(rank));
+  renderRank();
+}
+
+function renderRank() {
+  const box = document.getElementById('rank-list');
+  const rank = JSON.parse(localStorage.getItem('leaderboard') || '{}');
+  const sorted = Object.keys(rank).sort((a, b) => rank[b] - rank[a]);
+  if (!sorted.length) { box.innerHTML = "<div class='empty'>Chưa có dữ liệu</div>"; return; }
+  const medals = ['🥇', '🥈', '🥉'];
+  box.innerHTML = sorted.map((name, i) => `
+    <div class="rank-item">
+      <span class="rank-medal">${medals[i] || (i + 1) + '.'}</span>
+      <span class="rank-name">${name}</span>
+      <span class="rank-score">${rank[name].toLocaleString()}đ</span>
+    </div>`).join('');
+}
+
+/* ===== COMMENTS ===== */
+function sendComment() {
+  const input = document.getElementById('comment-input');
+  if (!input.value.trim()) return;
+  commentData.unshift({ name: memberName, text: input.value.trim(), time: new Date().toLocaleTimeString('vi-VN') });
+  if (commentData.length > 50) commentData.pop();
+  localStorage.setItem('comments', JSON.stringify(commentData));
+  input.value = '';
+  renderComments();
+}
+
+function renderComments() {
+  const box = document.getElementById('comments');
+  if (!commentData.length) { box.innerHTML = "<div class='empty'>Chưa có lời nhắn</div>"; return; }
+  box.innerHTML = commentData.map(c => `
+    <div class="comment-item">
+      <div class="comment-author">${c.name}</div>
+      <div class="comment-text">${c.text}</div>
+      <div class="comment-time">${c.time}</div>
+    </div>`).join('');
+}
+
+/* ===== CAMERA ===== */
+const successConfigs = {
+  '10k': { icon: '🎥', title: 'Camera đã mở!',        body: 'Nạp <b>10.000đ</b> thành công. Camera phát trực tiếp đã kích hoạt.' },
+  '15k': { icon: '👁️', title: 'AI YOLOv8 đã bật!',   body: 'Nạp <b>15.000đ</b> thành công. Camera + YOLOv8 đang chạy.' },
+  '20k': { icon: '👑', title: 'Full Pack đã mở!',     body: 'Nạp <b>20.000đ</b> thành công. Tất cả tính năng đã kích hoạt.' },
+};
+
+function openModal() {
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+const tierConfig = {
+  '10k': {
+    badge: { text: 'Classic', bg: 'linear-gradient(135deg, #c8a97e, #a0744a, #c8a97e)', color: '#fff8f0', border: '1px solid rgba(210,170,120,0.5)', shadow: '0 0 10px rgba(180,130,80,0.35)', extra: '' },
+    label: 'Camera trực tiếp',
+    note: null
+  },
+  '15k': {
+    badge: { text: 'Pro', bg: 'linear-gradient(135deg, #1d4ed8, #3b82f6, #60a5fa, #3b82f6, #1d4ed8)', color: '#bfdbfe', border: '1px solid rgba(96,165,250,0.45)', shadow: '0 0 12px rgba(59,130,246,0.4)', extra: 'background-size:200% 200%; animation:blueShimmer 3s ease infinite;' },
+    label: 'Camera + AI YOLOv8',
+    note: 'Phát hiện vật thể không xác định đang bật'
+  },
+  '20k': {
+    badge: { text: 'Premium', bg: 'linear-gradient(135deg, rgba(253,230,138,0.25), rgba(245,158,11,0.35), rgba(253,230,138,0.25))', color: '#fde68a', border: '1px solid rgba(253,230,138,0.45)', shadow: '0 0 14px rgba(251,191,36,0.45)', extra: '' },
+    label: 'Full Pack · Camera + AI + Lưu lịch sử',
+    note: 'Tự động lưu khoảnh khắc vật thể lạ'
+  }
+};
+
+function confirmPay(tier) {
+  closeModal();
+  const t = tierConfig[tier];
+  const zone = document.getElementById('camera-zone');
+
+  zone.innerHTML = `
+    <div class="camera-frame">
+      <div class="cam-live-dot">LIVE</div>
+      <div class="cam-tier-badge" style="background:${t.badge.bg}; color:${t.badge.color}; border:${t.badge.border}; box-shadow:${t.badge.shadow}; backdrop-filter:blur(8px); ${t.badge.extra}">${t.badge.text}</div>
+
+      <!-- TODO: thay thẻ này bằng <video> hoặc <img src="stream_url"> khi có camera -->
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5">
+        <path d="M15 10l4.553-2.276A1 1 0 0121 8.723v6.554a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+      </svg>
+      <div style="font-size:0.78rem; color:rgba(255,255,255,0.25); text-align:center; padding:0 16px;">${t.label}</div>
+      ${t.note ? `<div style="font-size:0.68rem; color:rgba(255,255,255,0.18); margin-top:-4px;">${t.note}</div>` : ''}
+    </div>
+    <button onclick="resetCamera()" style="margin-top:8px; background:none; border:none; color:rgba(255,255,255,0.3); font-size:0.72rem; cursor:pointer; text-decoration:underline;">Đổi gói</button>
+  `;
+
+  // Show success modal
+  const s = successConfigs[tier];
+  document.getElementById('success-icon').textContent = s.icon;
+  document.getElementById('success-title').textContent = s.title;
+  document.getElementById('success-body').innerHTML = s.body;
+  document.getElementById('modal-success').classList.add('show');
+}
+
+function resetCamera() {
+  document.getElementById('camera-zone').innerHTML = `
+    <button class="unlock-btn" onclick="openModal()">
+      📹 Nạp tiền để Unlock Camera
+    </button>
+  `;
+}
+
+function closeSuccess() {
+  document.getElementById('modal-success').classList.remove('show');
+}
+
+/* ===== WEATHER ===== */
+async function updateWeather() {
+  try {
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=19.63&longitude=105.72&current=temperature_2m');
+    const d = await r.json();
+    document.getElementById('temp').textContent = Math.round(d.current.temperature_2m) + '°C';
+  } catch {
+    document.getElementById('temp').textContent = '--°C';
+  }
+}
+
+/* ===== START ===== */
+renderRank();
+renderHistory();
+renderComments();
+updateWeather();
+setInterval(updateWeather, 300000);
+</script>
+</body>
+</html>
